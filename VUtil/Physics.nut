@@ -33,20 +33,3 @@ function VUtil::Physics::TraceRay(start, direction, distance, filter)
 	
 	return traceInfo;
 }
-
-//Traces a ray from an entity's origin along its forward vector
-function VUtil::Physics::TraceForward(entity, distance, filter)
-{
-	local start = entity.GetOrigin();
-	local line = entity.GetForwardVector() * distance;
-	local end = start + line;
-	
-	local frac = ::TraceLine(start,end,filter);
-	
-	local traceInfo = {}
-	traceInfo.Hit <- start + (line * frac);
-	traceInfo.Distance <- (line * frac).Length();
-	traceInfo.Fraction <- frac;
-	
-	return traceInfo;
-}
