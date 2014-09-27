@@ -43,24 +43,6 @@ function VUtil::Entity::SetKeyValue(entity,key,value)
 		case "Vector":
 			entity.__KeyValueFromVector( key, value );
 		break;
-		
-		case "instance": //Allows passing a named entity as a key.
-			if(value.IsValid())
-			{
-				if(value.GetName().len() != 0)
-				{
-					entity.__KeyValueFromString( key, value.GetName() );
-				}
-				else
-				{
-					printl( "[VUtil.Entity.SetKeyValue] Entity must have a name to be used as a value! (" + key + ")");
-				}
-			}
-			else
-			{
-				printl( "[VUtil.Entity.SetKeyValue] Cannot use an invalid entity as a value! (" + key + ")");
-			}
-		break;
 
 		default:
 			printl( "[VUtil.Entity.SetKeyValue] Cannot use " + typeof( value ) + " as a value! (" + key + ")" );

@@ -17,13 +17,15 @@ function VUtil::Math::Clamp(value,low,high)
 	if(value < low) return low;
 	if(value > high) return high;
 	return value;
-}	
+}
+	
 //Returns the smallest of the two values.
 function VUtil::Math::Min(a,b)
 {
 	if(a < b) return a;
 	return b;
 }
+
 //Returns the largest of the two values.
 function VUtil::Math::Max(a,b)
 {
@@ -49,11 +51,13 @@ function VUtil::Math::Distance(v1,v2)
 {
 	return (v1-v2).Length();
 }
+
 //Scales vector v to have a length of 1.
 function VUtil::Math::Normalize(v)
 {
 	return v * (1.0 / v.Length());
 }
+
 //Returns the pitch/yaw angles between vectors v1 and v2
 function VUtil::Math::AnglesBetween(v1,v2)
 {
@@ -62,4 +66,10 @@ function VUtil::Math::AnglesBetween(v1,v2)
 	local pitch = atan2(dir.Length2D(),dir.z);
 	
 	return Vector(pitch,yaw,0);
+}
+
+//Takes a vector relative to an entity and converts it to a world position.
+function VUtil::Math::LocalToWorld(entity,vec)
+{
+	return entity.GetOrigin() + (entity.GetLeftVector() * -vec.y) + (entity.GetForwardVector() * vec.x) + (entity.GetUpVector() * vec.z);
 }
