@@ -84,3 +84,10 @@ function VUtil::Math::WorldToLocal(entity,vec)
 	
 	return Vector(left.Dot(vector),forward.Dot(vector),up.Dot(vector))
 }
+
+//Compares two vectors for equality.
+function VUtil::Math::VectorEqual(v1,v2,threshold = 0.00001)
+{
+	local diff = v1-v2;
+	return (abs(diff.x) < threshold) && (abs(diff.y) < threshold) && (abs(diff.z) < threshold);
+}
