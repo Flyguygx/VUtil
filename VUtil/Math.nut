@@ -68,8 +68,19 @@ function VUtil::Math::AnglesBetween(v1,v2)
 	return Vector(pitch,yaw,0);
 }
 
-//Takes a vector relative to an entity and converts it to a world position.
+//Takes a position relative to an entity and converts it to a world position.
 function VUtil::Math::LocalToWorld(entity,vec)
 {
 	return entity.GetOrigin() + (entity.GetLeftVector() * -vec.y) + (entity.GetForwardVector() * vec.x) + (entity.GetUpVector() * vec.z);
+}
+
+//Takes a position in the world and converts it to one relative to an entity.
+function VUtil::Math::WorldToLocal(entity,vec)
+{
+	local vector = vec - entity.GetOrigin();
+	local left = entity.GetLeftVector();
+	local forward = entity.GetForwardVector();
+	local up = entity.GetUpVector();
+	
+	return Vector(left.Dot(vector),forward.Dot(vector),up.Dot(vector))
 }
