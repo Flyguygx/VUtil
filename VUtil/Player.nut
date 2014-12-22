@@ -94,49 +94,40 @@ function VUtil::Player::CreateEye(player)
 	{
 		if(player.GetClassname() == "player")
 		{
-			local playerScope = player.GetScriptScope();
-			if(!("Eye" in playerScope) || !playerScope.Eye.IsValid())
+			local playerID = player.entindex();
+			
+			//Create unique entity names for this player 
+			local playerName = "player_"+playerID;
+			local refName = "eye_ref_"+playerID;
+			local origName = "eye_orig_"+playerID;
+			local trackName = "eye_tracker_"+playerID;
+			
+			//Give the player a targetname
+			VUtil.Entity.SetName(player,playerName);
+			
+			//The entity that the logic_measure_movement measures relative to.
+			VUtil.Entity.Create("path_track", { targetname = refName });// MeasureReference/TargetReference
+			
+			//The entity which has the player's eye position & angles.
+			local eyeOrigin = VUtil.Entity.Create("path_track", { targetname = origName }); //Target
+			
+			//The logic_measure_movement entity that tracks the player's eye position & angles.
+			local tracker = VUtil.Entity.Create("logic_measure_movement",
 			{
-				player.ValidateScriptScope();
-				local playerID = player.entindex();
-				
-				//Create unique entity names for this player 
-				local playerName = "player_"+playerID;
-				local refName = "eye_ref_"+playerID;
-				local origName = "eye_orig_"+playerID;
-				local trackName = "eye_tracker_"+playerID;
-				
-				//Give the player a targetname
-				VUtil.Entity.SetName(player,playerName);
-				
-				//The entity that the logic_measure_movement measures relative to.
-				VUtil.Entity.Create("path_track", { targetname = refName });// MeasureReference/TargetReference
-				
-				//The entity which has the player's eye position & angles.
-				local eyeOrigin = VUtil.Entity.Create("path_track", { targetname = origName }); //Target
-				
-				//The logic_measure_movement entity that tracks the player's eye position & angles.
-				local tracker = VUtil.Entity.Create("logic_measure_movement",
-				{
-					targetname = trackName
-					MeasureReference = refName
-					TargetReference = refName
-					Target = origName
-					MeasureType = 1
-					TargetScale = 1
-				});
-				
-				//These do not get assigned properly with VUtil.Entity.Create
-				EntFireByHandle(tracker,"setmeasurereference",refName,0.01,null,null);
-				EntFireByHandle(tracker,"setmeasuretarget",playerName,0.01,null,null);
-				EntFireByHandle(tracker,"enable","",0.02,null,null);
-				
-				return eyeOrigin;
-			}
-			else
-			{
-				printl("[VUtil.Player.CreateEye] Player " + player.GetName() + " already has an eye tracker!" );
-			}
+				targetname = trackName
+				MeasureReference = refName
+				TargetReference = refName
+				Target = origName
+				MeasureType = 1
+				TargetScale = 1
+			});
+			
+			//These do not get assigned properly with VUtil.Entity.Create
+			EntFireByHandle(tracker,"setmeasurereference",refName,0.01,null,null);
+			EntFireByHandle(tracker,"setmeasuretarget",playerName,0.01,null,null);
+			EntFireByHandle(tracker,"enable","",0.02,null,null);
+			
+			return eyeOrigin;
 		}
 		else
 		{
