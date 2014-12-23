@@ -20,12 +20,20 @@ function VUtil::Debug::DrawEntityVectors(entity,size,xray = false,time = 0.15)
 }
 
 //Draws the entity's attachments
-function VUtil::Debug::DrawEntityAttachments(entity,size,xray = false,time = 0.15,amount = 32) //No way to get the number of attachments so assume there are 32 or less
+function VUtil::Debug::DrawEntityAttachments(entity,size,xray = false,time = 0.15) //No way to get the number of attachments so assume there are 32 or less
 {
-	for(local i = 0;i < amount;i++)
+	local entOrigin = entity.GetOrigin();
+	
+	for(local i = 0;i < 128;i++)
 	{
 		local origin = entity.GetAttachmentOrigin(i);
-		local angles = entity.GetAttachmentAngles(i); //todo
+		//local angles = entity.GetAttachmentAngles(i); //todo
+		
+		if(i != 0 && VUtil.Math.VectorEqual(entOrigin, origin)) //If the attachment doesn't exist then origin will equal the entity's origin.
+		{
+			break; //This attachment doesn't exist so stop and assume we have drawn all of them.
+		}
+		
 		DebugDrawLine(origin, origin + (Vector(1,0,0) * size), 255, 0, 0, xray, time)
 		DebugDrawLine(origin, origin + (Vector(0,1,0) * size), 0, 255, 0, xray, time)
 		DebugDrawLine(origin, origin + (Vector(0,0,1) * size), 0, 0, 255, xray, time)
